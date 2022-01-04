@@ -48,14 +48,33 @@ class MLP(nn.Module):
         self.in_dim = in_dim
         self.out_dim = dims[-1]
 
-        # TODO:
         #  - Initialize the layers according to the requested dimensions. Use
         #    either nn.Linear layers or create W, b tensors per layer and wrap them
         #    with nn.Parameter.
         #  - Either instantiate the activations based on their name or use the provided
         #    instances.
         # ====== YOUR CODE: ======
-        raise NotImplementedError()
+        super().__init__()
+        updated_non_lins = []
+
+        for non_lin in nonlins:
+            if isinstance(non_lin, nn.Module):
+                updated_non_lins.append(non_lin)
+            else:
+                assert isinstance(non_lin, str)
+                new_non_lin = ACTIVATIONS[non_lin](**ACTIVATION_DEFAULT_KWARGS[non_lin])
+                updated_non_lins.append(new_non_lin)
+
+        all_dims = [in_dim, *dims]
+        layers = []
+
+        for i, (in_dim, out_dim) in enumerate(zip(all_dims[:-1], all_dims[1:])):
+            layers += [
+                nn.Linear(in_dim, out_dim, bias=True),
+                updated_non_lins[i]
+            ]
+
+        self.fc_layers = nn.Sequential(*layers)
         # ========================
 
     def forward(self, x: Tensor) -> Tensor:
@@ -63,8 +82,10 @@ class MLP(nn.Module):
         :param x: An input tensor, of shape (N, D) containing N samples with D features.
         :return: An output tensor of shape (N, D_out) where D_out is the output dim.
         """
-        # TODO: Implement the model's forward pass. Make sure the input and output
+        # Implement the model's forward pass. Make sure the input and output
         #  shapes are as expected.
         # ====== YOUR CODE: ======
-        raise NotImplementedError()
+        x = torch.reshape(x, (x.shape[0], -1))
+        y_pred = self.fc_layers(x)
+        return y_pred
         # ========================

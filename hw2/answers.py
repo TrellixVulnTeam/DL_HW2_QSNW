@@ -14,9 +14,12 @@ def part1_arch_hp():
     hidden_dims = 0  # number of output dimensions for each hidden layer
     activation = "none"  # activation function to apply after each hidden layer
     out_activation = "none"  # activation function to apply at the output layer
-    # TODO: Tweak the MLP architecture hyperparameters.
+    # Tweak the MLP architecture hyperparameters.
     # ====== YOUR CODE: ======
-    raise NotImplementedError()
+    n_layers = 5
+    hidden_dims = 160
+    activation = "relu"
+    out_activation = "logsoftmax"
     # ========================
     return dict(
         n_layers=n_layers,
@@ -32,13 +35,15 @@ def part1_optim_hp():
 
     loss_fn = None  # One of the torch.nn losses
     lr, weight_decay, momentum = 0, 0, 0  # Arguments for SGD optimizer
-    # TODO:
     #  - Tweak the Optimizer hyperparameters.
     #  - Choose the appropriate loss function for your architecture.
     #    What you returns needs to be a callable, so either an instance of one of the
     #    Loss classes in torch.nn or one of the loss functions from torch.nn.functional.
     # ====== YOUR CODE: ======
-    raise NotImplementedError()
+    loss_fn = torch.nn.CrossEntropyLoss()
+    lr = 0.01
+    weight_decay = 0.007
+    momentum = 0.25
     # ========================
     return dict(lr=lr, weight_decay=weight_decay, momentum=momentum, loss_fn=loss_fn)
 
