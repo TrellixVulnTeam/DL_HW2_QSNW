@@ -282,7 +282,7 @@ class ClassifierTrainer(Trainer):
 
         # Classify and calculate number of correct predictions
         y_classified = torch.argmax(y_pred, dim=1)
-        num_correct = int((y == y_classified).sum())
+        num_correct = (y == y_classified).sum().item()
 
         batch_loss = batch_loss.item()
         # ========================
@@ -313,7 +313,7 @@ class ClassifierTrainer(Trainer):
 
             # Classify and calculate number of correct predictions
             y_classified = torch.argmax(y_pred, dim=1)
-            num_correct = int((y == y_classified).sum())
+            num_correct = (y == y_classified).sum().item()
             # ========================
 
         return BatchResult(batch_loss, num_correct)

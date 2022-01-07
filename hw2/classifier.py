@@ -1,3 +1,4 @@
+import sklearn.metrics
 import torch
 import matplotlib.pyplot as plt
 from abc import ABC, abstractmethod
@@ -92,11 +93,10 @@ class ArgMaxClassifier(Classifier):
     """
 
     def _classify(self, y_proba: Tensor):
-        # TODO:
         #  Classify each sample to one of C classes based on the highest score.
         #  Output should be a (N,) integer tensor.
         # ====== YOUR CODE: ======
-        raise NotImplementedError()
+        return torch.argmax(y_proba, dim=1)
         # ========================
 
 
@@ -129,7 +129,7 @@ class BinaryClassifier(Classifier):
         # ====== YOUR CODE: ======
         res = []
         for prob in y_proba:
-            if int(prob[self.positive_class]) >= self.threshold:
+            if prob[self.positive_class].item() >= self.threshold:
                 res.append(1)
             else:
                 res.append(0)
@@ -174,7 +174,6 @@ def plot_decision_boundary_2d(
         cmap=cmap,
     )
 
-    # TODO:
     #  Construct the decision boundary.
     #  Use torch.meshgrid() to create the grid (x1_grid, x2_grid) with step dx on which
     #  you evaluate the classifier.
@@ -182,7 +181,19 @@ def plot_decision_boundary_2d(
     #  plot a contour map.
     x1_grid, x2_grid, y_hat = None, None, None
     # ====== YOUR CODE: ======
-    
+    x1_label = x[:, 0]
+    x2_label = x[:, 1]
+    x1_step = torch.arange(torch.min(x1_label).item() - dx, torch.max(x1_label).item() + dx, dx)
+    x2_step = torch.arange(torch.min(x2_label).item() - dx, torch.max(x2_label).item() + dx, dx)
+    x1_grid, x2_grid = torch.meshgrid(x1_step, x2_step)
+
+    x1_flattened = x1_grid.flatten().unsqueeze(1)
+    x2_flattened = x2_grid.flatten().unsqueeze(1)
+    # print(x1_flattened)
+    # print(x2_flattened)
+    to_classify = torch.concat([x1_flattened, x2_flattened], axis=-1)
+    # print(to_classify)
+    y_hat = classifier.classify(to_classify).reshape(x1_grid.shape)
     # ========================
 
     # Plot the decision boundary as a filled contour
@@ -208,15 +219,18 @@ def select_roc_thresh(
         created.
     """
 
-    # TODO:
     #  Calculate the optimal classification threshold using ROC analysis.
     #  You can use sklearn's roc_curve() which returns the (fpr, tpr, thresh) values.
     #  Calculate the index of the optimal threshold as optimal_thresh_idx.
     #  Calculate the optimal threshold as optimal_thresh.
     fpr, tpr, thresh = None, None, None
-    optimal_theresh_idx, optimal_thresh = None, None
+    optimal_thresh_idx, optimal_thresh = None, None
     # ====== YOUR CODE: ======
-    raise NotImplementedError()
+    classified = classifier.predict_proba(x)[:, classifier.positive_class]
+    fpr, tpr, thresh = sklearn.metrics.roc_curve(y, classified.detach())
+    fnr = 1 - tpr
+    optimal_thresh_idx = torch.argmin(torch.tensor(abs(fpr - fnr)))
+    optimal_thresh = thresh[optimal_thresh_idx]
     # ========================
 
     if plot:

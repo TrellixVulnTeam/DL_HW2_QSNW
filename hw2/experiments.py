@@ -34,7 +34,6 @@ def mlp_experiment(
     dl_test: DataLoader,
     n_epochs: int,
 ):
-    # TODO:
     #  - Create a BinaryClassifier model.
     #  - Train using our ClassifierTrainer for n_epochs, while validating on the
     #    validation set.
@@ -46,7 +45,30 @@ def mlp_experiment(
     #  Note: use print_every=0, verbose=False, plot=False where relevant to prevent
     #  output from this function.
     # ====== YOUR CODE: ======
-    raise NotImplementedError()
+
+    dims = [width] * depth
+    dims.append(2)  # because its binary
+    nonlins = ['tanh'] * depth
+    nonlins.append('logsoftmax')
+    mlp = MLP(in_dim=2, dims=dims, nonlins=nonlins)
+    model = BinaryClassifier(model=mlp)
+
+    loss_fn = torch.nn.CrossEntropyLoss()
+    lr = 0.01
+    weight_decay = 0.0053
+    momentum = 0.89
+    hp_optim = dict(lr=lr, weight_decay=weight_decay, momentum=momentum, loss_fn=loss_fn)
+
+    loss_fn = hp_optim.pop('loss_fn')
+    optimizer = torch.optim.SGD(params=model.parameters(), **hp_optim)
+    trainer = ClassifierTrainer(model, loss_fn, optimizer)
+    fit_result = trainer.fit(dl_train, dl_valid, num_epochs=n_epochs, print_every=0)
+
+    thresh = select_roc_thresh(model, *dl_valid.dataset.tensors, plot=False)
+    model.threshold = thresh
+    valid_acc = fit_result.test_acc[-1]
+    epoch_res = trainer.test_epoch(dl_test, verbose=False)
+    test_acc = epoch_res.accuracy
     # ========================
     return model, thresh, valid_acc, test_acc
 
@@ -108,7 +130,35 @@ def cnn_experiment(
     #   for you automatically.
     fit_res = None
     # ====== YOUR CODE: ======
-    raise NotImplementedError()
+    sample, _ = ds_train[0]
+    channels = []
+    for i in filters_per_layer:
+        channels += [i] * layers_per_block
+
+    model = model_cls(
+        in_size=sample.shape,
+        out_classes=10,
+        channels=channels,
+        pool_every=pool_every,
+        hidden_dims=hidden_dims,
+        pooling_params=dict(kernel_size=2),
+        conv_params={'kernel_size': 3, 'stride': 1, 'padding': 1}
+    ).to(device)
+
+    trainer = ClassifierTrainer(
+        model=ArgMaxClassifier(model=model),
+        loss_fn=torch.nn.CrossEntropyLoss().to(device),
+        optimizer=torch.optim.AdamW(model.parameters()),
+        device=device
+    )
+    fit_res = trainer.fit(
+        dl_train=torch.utils.data.DataLoader(ds_train, bs_train, shuffle=True),
+        dl_test=torch.utils.data.DataLoader(ds_test, bs_test),
+        num_epochs=epochs,
+        checkpoints=checkpoints,
+        early_stopping=early_stopping,
+        max_batches=batches
+    )
     # ========================
 
     save_experiment(run_name, out_dir, cfg, fit_res)
