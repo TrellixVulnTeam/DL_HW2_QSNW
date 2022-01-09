@@ -377,14 +377,13 @@ class YourCNN(CNN):
         """
         See CNN.__init__
         """
-        super().__init__(*args, **kwargs)
-
         # Add any additional initialization as needed.
 
         # ====== YOUR CODE: ======
-        self.dropout = 0.417
-        self.conv_params = dict(kernel_size=3, padding=1)
-        self.pooling_params = dict(kernel_size=2)
-        self.batchnorm = True
-        self.activation_type = "relu"
+        more_args = dict(
+            conv_params=dict(kernel_size=3, padding=1),
+            pooling_params=dict(kernel_size=2),
+            activation_type="relu"
+        )
+        super().__init__(*args, **kwargs, **more_args)
         # ========================
