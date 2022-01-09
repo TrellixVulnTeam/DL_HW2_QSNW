@@ -309,7 +309,7 @@ class ClassifierTrainer(Trainer):
             y_pred = self.model.forward(X)
 
             # Compute loss
-            batch_loss = self.loss_fn(y_pred, y)
+            batch_loss = self.loss_fn(y_pred, y).item()
 
             # Classify and calculate number of correct predictions
             y_classified = torch.argmax(y_pred, dim=1)
