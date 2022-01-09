@@ -151,13 +151,73 @@ def part2_optim_hp():
 
 
 part2_q1 = r"""
-**Your answer:**
+__________________________________________________________________________________
+1) NUMBER OF PARAMETERS:
+
+Formula:
+ParamSet = (kernelH*kernelW*inChannel + bias)*(outChannels)
 
 
-In one conv layer the number of parameters is:
+Bottleneck of parameters (3 Layers):
 
-(kernel
+Param Set1 = (1*1*256+1)*64 = 16,448
+Param Set2 = (3*3*64+1)*64 = 36,928
+Param Set3 = (1*1*64+1)*256 = 16,640
+Total Parameters: 70,016
 
+
+Normal Number of parameters (2 Layers):
+
+Param Set1 = (3*3*256+1) = 590,080
+Param Set2 = Param Set1 = 590,080
+Total Parameters: 1,180,160
+__________________________________________________________________________________
+2) FLOATING POINT OPERATIONS:
+
+Formulas:
+Relu Floating Point Operations = outChannels*HW
+Convolution Floating Point Operations = (kernelH*kernelW*in_channel+bias)*outChannel*HW
+Residual = outChannel
+Where HW = Hout*Wout
+
+
+Bottleneck number of operations (3 Layers):
+
+Convolution: (1*1*256+1)*64*HW = 16,448HW
+Activation (RELU): 64HW
+Convolution: (3*3*64+1)*64HW = 36,864HW
+Activation (RELU): 64HW
+Convolution: (3*3*64+1)*256HW = 147,456HW
+Residual = 256HW
+Number of operations: 201,152HW
+
+
+Normal number of operations (2 Layers):
+
+Convolution: (3*3*256+1)*256HW = 590,080HW
+Activation (RELU): 256HW
+Convolution: (3*3*256+1)256HW = 590,080HW
+Residual = 256HW
+Number of operations: 1,180,672HW
+__________________________________________________________________________________
+3) FLOATING POINT OPERATIONS:
+Bottleneck: Combining features.
+Normal: Feature maps not reduced. No feature combinations
+__________________________________________________________________________________
+
+Conclusion:
+
+            Bottleneck                              Normal
+Parameters: 70,016                    |  Parameters: 1,180,160
+Easy to tune small parameter amounts  |  Tons of parameters, hard to tune
+                                      |
+Bottleneck of operations: 201,152HW   |  Normal number of operations: 1,180,672HW
+Easier to compute                     |  Long execution time, hard to tune parameters with such long runtimes.
+                                      |
+Reducing features allows us to reduce |  No feature reduction
+computation amounts and RAM           |
+
+__________________________________________________________________________________
 """
 
 # ==============
