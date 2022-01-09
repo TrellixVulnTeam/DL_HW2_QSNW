@@ -379,16 +379,12 @@ class YourCNN(CNN):
         """
         super().__init__(*args, **kwargs)
 
-        # TODO: Add any additional initialization as needed.
+        # Add any additional initialization as needed.
+
         # ====== YOUR CODE: ======
-
+        self.dropout = 0.417
+        self.conv_params = dict(kernel_size=3, padding=1)
+        self.pooling_params = dict(kernel_size=2)
+        self.batchnorm = True
+        self.activation_type = "relu"
         # ========================
-
-    # TODO: Change whatever you want about the CNN to try to
-    #  improve it's results on CIFAR-10.
-    #  For example, add batchnorm, dropout, skip connections, change conv
-    #  filter sizes etc.
-    # ====== YOUR CODE: ======
-
-
-    # ========================
