@@ -377,18 +377,13 @@ class YourCNN(CNN):
         """
         See CNN.__init__
         """
-        super().__init__(*args, **kwargs)
+        # Add any additional initialization as needed.
 
-        # TODO: Add any additional initialization as needed.
         # ====== YOUR CODE: ======
-
+        more_args = dict(
+            conv_params=dict(kernel_size=3, padding=1),
+            pooling_params=dict(kernel_size=2),
+            activation_type="relu"
+        )
+        super().__init__(*args, **kwargs, **more_args)
         # ========================
-
-    # TODO: Change whatever you want about the CNN to try to
-    #  improve it's results on CIFAR-10.
-    #  For example, add batchnorm, dropout, skip connections, change conv
-    #  filter sizes etc.
-    # ====== YOUR CODE: ======
-
-
-    # ========================
