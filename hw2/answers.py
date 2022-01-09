@@ -227,55 +227,32 @@ ________________________________________________________________________________
 
 
 part3_q1 = r"""
-**Your answer:**
+1. As we build more intricate, deeper models we gain an increase in the accuracy rate also increases and enables the
+extraction of more accurate and intricate features, when we go too deep, our accuracy starts to diminish.
+The best results are for depth=6 with above 70% accuracy, and we speculate that we may not have enough data for the 
+deeper model to extract the features correctly and take full advantage of its power.
 
-
-Write your answer using **markdown** and $\LaTeX$:
-```python
-# A code block
-a = 2
-```
-An equation: $e^{i\pi} -1 = 0$
-
+2. The model could not train on K=64, L=16. Since the loss graph is a flat line, we speculate that this could be the
+result of vanishing gradients. result of vanishing gradients. Two options to try and improve the results is the use
+of batchnorms or residual networks. 
 """
 
 part3_q2 = r"""
-**Your answer:**
-
-
-Write your answer using **markdown** and $\LaTeX$:
-```python
-# A code block
-a = 2
-```
-An equation: $e^{i\pi} -1 = 0$
-
+As we increase the number of filters, we ger increasingly better accuracy (also when comparing to experiment 1.1).
+We assume that the high number of filters assist us in creating good high-quality
+features that assist our models to classify the samples better.
 """
 
 part3_q3 = r"""
-**Your answer:**
-
-
-Write your answer using **markdown** and $\LaTeX$:
-```python
-# A code block
-a = 2
-```
-An equation: $e^{i\pi} -1 = 0$
-
+Once again, we can see the issue of the vanishing gradient showing its face for the L=4, K = [64, 128,256].
+We can also see that comparing with the previous experiments, our results do not get alot better. Another interesting
+point is that we can see spiking in the loss on large amounts of iterations while using small L-s on the
+training set which suggests overfitting.
 """
 
 part3_q4 = r"""
-**Your answer:**
-
-
-Write your answer using **markdown** and $\LaTeX$:
-```python
-# A code block
-a = 2
-```
-An equation: $e^{i\pi} -1 = 0$
-
+Our best results for the K=32 are for L=8, and L=2 for K= [64 128 256]. We do have to be carefull with the latter, since
+we can see the loss graph spike up towards the most recent iterations on the test set, suggesting overfitting.
 """
 
 part3_q5 = r"""
