@@ -372,7 +372,7 @@ class ResNet(CNN):
         return seq
 
 
-class YourCNN(CNN):
+class YourCNN(ResNet):
     def __init__(self, *args, **kwargs):
         """
         See CNN.__init__
@@ -380,10 +380,12 @@ class YourCNN(CNN):
         # Add any additional initialization as needed.
 
         # ====== YOUR CODE: ======
-        more_args = dict(
-            conv_params=dict(kernel_size=3, padding=1),
-            pooling_params=dict(kernel_size=2),
-            activation_type="relu"
-        )
-        super().__init__(*args, **kwargs, **more_args)
+        kwargs['conv_params'] = dict(kernel_size=3, padding=1)
+        kwargs['pooling_params'] = dict(kernel_size=2)
+        kwargs['dropout'] = 0.2
+        kwargs['batchnorm'] = True
+
+        kwargs['activation_type'] = "tanh"
+
+        super().__init__(*args, **kwargs)
         # ========================
