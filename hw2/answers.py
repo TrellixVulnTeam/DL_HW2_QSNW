@@ -256,15 +256,12 @@ we can see the loss graph spike up towards the most recent iterations on the tes
 """
 
 part3_q5 = r"""
-**Your answer:**
+1. Using ResNet CNN we attempted to reduce the overfitting many of the previous models had. We added batchnorm in order
+ to resolve the issue, and we also tested different activation functions and tried to optimize our parameters.
+ Eventually we decided to go with tanh, and added dropout and batchnorm, optimizing using the checkpoint and early stopping
+ we implemented in previous ex.
 
-
-Write your answer using **markdown** and $\LaTeX$:
-```python
-# A code block
-a = 2
-```
-An equation: $e^{i\pi} -1 = 0$
-
+2. Comparing to previous attempts, we can see an improvement with ~77% accuracy. Also we attempted to minimise the loss
+by using the new functions we implemented and what we learned from running the previous exercises.
 """
 # ==============
