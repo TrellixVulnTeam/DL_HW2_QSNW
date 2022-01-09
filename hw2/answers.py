@@ -51,39 +51,47 @@ def part1_optim_hp():
 part1_q1 = r"""
 **Your answer:**
 
+Optimization error - We do have an optimization error since we
+get into a local minimum with the train set which is not globally
+(we don't get 100% accuracy) but we don't think it is very high since
+the accuracy is still high.
 
-Write your answer using **markdown** and $\LaTeX$:
-```python
-# A code block
-a = 2
-```
-An equation: $e^{i\pi} -1 = 0$
+Generalization error - We see in the graphs that the train batch is 
+improving rapidly but the test batch is not stable.
+This is because we have a relatively small data set and it means that we 
+have a lot of noise in our data we train on. So, the generalization error
+is high.
+
+Approximation error - We used here MLP with 1 activation function
+and 1 out activation function. By definition from the tutorial we use
+a limited set of possible functions and therefore we have an high approximation
+error.
 
 """
 
 part1_q2 = r"""
 **Your answer:**
 
-
-Write your answer using **markdown** and $\LaTeX$:
-```python
-# A code block
-a = 2
-```
-An equation: $e^{i\pi} -1 = 0$
+We can see that in the creation of the data the validation data set
+has more orange dots (class 1 which is the default positive class in the
+Binary Classifier) in the blue area than blue dots in the orange
+area, therefore we suspect that FNR will be higher than FPR.
 
 """
 
 part1_q3 = r"""
 **Your answer:**
 
+In most cases the "optimal" ROC point is not relevant. For each case we
+will decide what is more important to decrease, FNR or FPR.
 
-Write your answer using **markdown** and $\LaTeX$:
-```python
-# A code block
-a = 2
-```
-An equation: $e^{i\pi} -1 = 0$
+1. In this case since the symptoms are not lethal and the patient could be
+immediately treated FNR is not so bad, but if we get FPR than the patient will
+do expensive tests. In this case we will aim to a higher FNR than FPR.
+
+2. In this case we must get the lowest FNR possible because patient could
+die with high probability if not diagnosed early and correctly.
+In this case we will aim to a higher FPR than FNR.
 
 """
 
@@ -91,13 +99,31 @@ An equation: $e^{i\pi} -1 = 0$
 part1_q4 = r"""
 **Your answer:**
 
+1. We can see in each column a fixed depth with changing width.
+We see that when the width is very small (for example, 2) the model is too
+simple and we get bad results. When the width is very high (for example, 128)
+the model is too complicated. Is seems that the best results are somewhere in
+the middle (8 or 32).
 
-Write your answer using **markdown** and $\LaTeX$:
-```python
-# A code block
-a = 2
-```
-An equation: $e^{i\pi} -1 = 0$
+2. We can see in each row a fixed width with changing depth.
+In the first row when the width is 2 which is very small the best depth is 4.
+In the other rows when the width is bigger than the best depth is 2.
+The reason could be that when the width is to small than the model is simple
+and we need more depth to make it a little more complicated and accurate.
+But, when the width is big enough too much depth could get the model over
+fitted with our data.
+
+3. In the first case we see that 4x8 is more accurate than 1x32. The reason
+could be that in 1x32 the width is large but the depth is too small to be accurate
+enough and more depth we smaller width is better.
+
+In the second case, the results are almost the same. We see that 1x128 is worst
+because it has only 1 depth and big width, and 4x32 is more balanced which
+create better accuracy. 
+
+4. Our model can be over fitted to the data and because of that the threshold
+is very important. Using tuned threshold can make make the model more generalized
+and we see that most of the time we get better results after tuning it.
 
 """
 # ==============
@@ -128,12 +154,9 @@ part2_q1 = r"""
 **Your answer:**
 
 
-Write your answer using **markdown** and $\LaTeX$:
-```python
-# A code block
-a = 2
-```
-An equation: $e^{i\pi} -1 = 0$
+In one conv layer the number of parameters is:
+
+(kernel
 
 """
 
